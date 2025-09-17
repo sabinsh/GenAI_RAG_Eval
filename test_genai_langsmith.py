@@ -39,8 +39,11 @@ def ask_question(user_prompt) -> str:
 # --- Custom Evaluator ---
 def keyword_eval(run, example, **kwargs) -> EvaluationResult:
     """Checks if expected keyword is in model output."""
-    expected = example.inputs["expected"].lower()       # dataset expected
-    actual = run.outputs["output"].lower()              # model run output
+    # expected = example.inputs["expected"].lower()       # dataset expected
+    # actual = run.outputs["output"].lower()              # model run output
+    expected = str(example.inputs.get("expected", "")).lower()
+    actual = str(run.outputs.get("output", "")).lower()
+
 
     success = expected in actual
     return EvaluationResult(
@@ -61,9 +64,15 @@ def test_langsmith_experiment():
         evals = r["evaluation_results"]["results"]
         print (f"evals {evals}")
         # loop over each evaluator result
+        #for e in evals:
+            #assert e.score >= 0.8, f"{e.key} failed for {r['example'].inputs['input']}: {e.explanation}"
+           
         for e in evals:
-            assert e.score >= 0.8, f"{e.key} failed for {r['example'].inputs['input']}: {e.explanation}"
-
+            score = e.score if e.score is not None else 0.0
+            comment = getattr(e, "comment", "")
+            assert score >= 0.8, (
+                f"{e.key} failed for {r['example'].inputs['input']}: {comment}"
+            )
 
 # --- Run manually without pytest ---
 if __name__ == "__main__":

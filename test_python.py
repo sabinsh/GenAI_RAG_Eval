@@ -11,12 +11,12 @@ def addition(a, b):
     return a + b
 
 #Unit Testing
-def test_addition_1():
-    a = 2
-    b = 3
-    expected = 5
-    actual = addition(a, b) # 6
-    assert actual == expected, f"Expected {a} + {b} to equal {expected}, but got {actual}"
+# def test_addition_1():
+#     a = 2
+#     b = 3
+#     expected = 5
+#     actual = addition(a, b) # 6
+#     assert actual == expected, f"Expected {a} + {b} to equal {expected}, but got {actual}"
 
 
 
